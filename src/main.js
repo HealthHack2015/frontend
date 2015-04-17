@@ -56,14 +56,13 @@ var Dashboard = React.createClass({
 
 	loadDiseases: function() {
 		$.ajax({
-			url: this.props.url,
+			url: "http://23.94.43.139:8081/get_diseases",
 			dataType: 'json',
 			success: function(data) {
-				// console.log(this.props.url, data);
 				this.setState({diseases: data});
 			}.bind(this),
 			error: function(xhr, status, err) {
-				console.error(this.props.url, status, err.toString());
+				console.error("http://23.94.43.139:8081/get_diseases", status, err.toString());
 			}.bind(this)
 		});
 	},
@@ -97,12 +96,21 @@ var Dashboard = React.createClass({
 
 	computeScores: function() {
 		var curr_selectors = this.state.selectors;
-		var test = ""
+		var param = [];
 		for (i in curr_selectors) {
-			test += curr_selectors[i].input + "\n";
+			param.push(curr_selectors[i].input);
 		}
-		console.log(test);
-		alert(test);
+		$.ajax({
+			url: "http://23.94.43.139:8081/get_scores",
+			dataType: 'json',
+			success: function(data) {
+				console.log("http://23.94.43.139:8081/get_scores", data);
+				// this.setState({diseases: data});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.error("http://23.94.43.139:8081/get_scores", status, err.toString());
+			}.bind(this)
+		});
 	},
 
 	render: function() {
@@ -138,6 +146,6 @@ var Dashboard = React.createClass({
 });
 
 React.render(
-	<Dashboard url="http://23.94.43.139:8081/get_diseases" />,
+	<Dashboard />,
 	document.getElementById('sandbox')
 );
